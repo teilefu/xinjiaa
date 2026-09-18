@@ -36,4 +36,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: 星迹日历-APK
-          path:bin/*.apk
+           path: bin/*.apk
