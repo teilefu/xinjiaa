@@ -26,10 +26,13 @@ jobs:
       - name: 安装 buildozer
         run: |
           pip install --upgrade pip
-          pip install buildozer cython
+          pip install buildozer==2.3.1 cython
 
-      - name: 打包 APK（自动下载SDK，约30-50分钟）
+      - name: 强制使用兼容NDK并打包 APK
         run: |
+          sed -i 's/^android.ndk_version.*/android.ndk_version = 25c/' buildozer.spec
+          grep -q 'android.ndk_version' buildozer.spec || echo 'android.ndk_version = 25c' >> buildozer.spec
+          grep -q 'android.accept_sdk_license' buildozer.spec || echo 'android.accept_sdk_license = True' >> buildozer.spec
           yes | buildozer -v android debug
 
       - name: 上传APK
