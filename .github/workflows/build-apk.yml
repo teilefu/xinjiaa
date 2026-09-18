@@ -30,8 +30,8 @@ jobs:
 
       - name: 强制使用兼容NDK并打包 APK
         run: |
-          sed -i '/^\[app\]/a android.ndk_version = 25c' buildozer.spec
-          sed -i '/^\[app\]/a android.accept_sdk_license = True' buildozer.spec
+          grep -q 'android.ndk_version = 25c' buildozer.spec || sed -i '/^\[app\]/a android.ndk_version = 25c' buildozer.spec
+          grep -q 'android.accept_sdk_license = True' buildozer.spec || sed -i '/^\[app\]/a android.accept_sdk_license = True' buildozer.spec
           grep -n 'ndk_version\|accept_sdk' buildozer.spec
           yes | buildozer -v android debug
 
