@@ -34,6 +34,8 @@ android.permissions = VIBRATE,POST_NOTIFICATIONS,READ_MEDIA_IMAGES,READ_EXTERNAL
 # 安卓API级别（对应安卓版本兼容性）
 android.api = 34
 android.minapi = 24
+android.ndk_version = 25c
+android.accept_sdk_license = True
 
 # 应用名称显示为中文
 android.app_name = 星迹日历
