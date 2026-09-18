@@ -13,7 +13,7 @@ source.include_patterns = assets/*,images/*
 version = 0.1.0
 
 # 依赖库（纯Python，无需编译C++）
-requirements = python3,kivy==2.3.1,lunar_python,plyer
+requirements = python3,kivy==2.3.2,lunar_python,plyer
 
 # 界面方向：竖屏
 orientation = portrait
@@ -21,9 +21,9 @@ orientation = portrait
 # 全屏
 fullscreen = 0
 
-# 图标与启动图（使用你自制的星空图标）
+# 图标（使用你自制的星空图标）；启动画面用纯色背景，点开直接进主页
 icon.filename = app_icon.png
-presplash.filename = app_icon.png
+presplash.filename = presplash_blank.png
 
 # 支持的手机架构（arm64-v8a 覆盖几乎所有现代安卓手机）
 android.archs = arm64-v8a
@@ -34,8 +34,6 @@ android.permissions = VIBRATE,POST_NOTIFICATIONS,READ_MEDIA_IMAGES,READ_EXTERNAL
 # 安卓API级别（对应安卓版本兼容性）
 android.api = 34
 android.minapi = 24
-android.ndk_version = 25c
-android.accept_sdk_license = True
 
 # 应用名称显示为中文
 android.app_name = 星迹日历

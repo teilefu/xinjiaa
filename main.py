@@ -12,9 +12,11 @@
 """
 import json
 import os
+import sys
 import uuid
 import shutil
 import platform
+import traceback
 from datetime import date, timedelta
 
 from kivy.app import App
@@ -42,7 +44,20 @@ from lunar_python import Solar, Lunar
 # ───────────────────────── 全局配置 ─────────────────────────
 FONT = 'NotoSansSC-Regular.otf'
 FONT_B = 'NotoSansSC-Bold.otf'
-LabelBase.register(name='zh', fn_regular=FONT, fn_bold=FONT_B)
+
+def _register_fonts():
+    """注册中文字体；若字体文件缺失则回退系统字体，避免启动崩溃"""
+    try:
+        LabelBase.register(name='zh', fn_regular=FONT, fn_bold=FONT_B)
+        return
+    except Exception:
+        pass
+    try:
+        LabelBase.register(name='zh', fn_regular=FONT)
+    except Exception:
+        pass
+
+_register_fonts()
 
 RED    = '#e64545'   # 节日/今天/倒计时
 ORANGE = '#e67e22'   # 节气
@@ -1097,11 +1112,26 @@ class HolidayScreen(Screen):
 
 # ───────────────────────── App 主体 ─────────────────────────
 
+def install_crash_guard():
+    """把未捕获的 Python 异常写入 user_data_dir/crash.log，便于排查闪退原因"""
+    def hook(tp, val, tb):
+        try:
+            app = App.get_running_app()
+            p = os.path.join(app.user_data_dir, 'crash.log')
+            with open(p, 'w', encoding='utf-8') as f:
+                f.write(''.join(traceback.format_exception(tp, val, tb)))
+        except Exception:
+            pass
+        sys.__excepthook__(tp, val, tb)
+    sys.excepthook = hook
+
+
 class XingjiApp(App):
     title = '星迹日历'
     icon = 'app_icon.png'
 
     def build(self):
+        install_crash_guard()
         self.data = load_data(self)
         self.sm = ScreenManager(transition=SlideTransition(duration=0.25))
         self.main_screen = MainScreen(self, name='main')
